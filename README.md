@@ -1,3 +1,5 @@
+[CppToCsharp - A quick transition guide](CppToCSharp.md)
+
 # About Repo
 This repo is my own kind of research work for the full transitioning from C++ to C#.
 This means I want to write a C# code in C#, not a C++ in C#.
