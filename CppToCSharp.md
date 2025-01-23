@@ -1,12 +1,14 @@
 ## Basic Types related
-* `var x` - sometheing like auto.
+* `var x` - sometheing like auto `auto x = 32`. Compile time check. No casting required.
+* `object x` - like void* `void* obj = &example`. Compile time check. Casting needed.
+* `dynamic x` - Try avoid it. It is like void*. Runtime check. Dynamic programming, APIs. Pretty slow.
 * `System.Convert` - everything from basic type could be converted to other basic types.
 ### Strings
 * `@"text"` - Verbatim strings, raw string just text without escape sequence.
 * `$$"text with {{x}}` - Interpolated, $$ means how many {{ should be for variable.
 ### Floating points
 They have got IsInfinity and etc. So its possible to use it with higher math's uncertainties.
-* `decimal z` - introduced, 16 bytes represents as int.
+* `decimal z` - introduced, 16 bytes represents as int. Not working with higher math calculations like dividing by zero and etc.
 ### Int
 * `Int16, Int32, Int64, Int128 and etc` - Just addition to int with new ranges. Like long, long long and etc.
 ### Array
@@ -27,7 +29,7 @@ Before enum will make it like an ordinal enum from C++. Use it for bitwise opera
 ## Operators
 * `x ?? 30` or `x ??= 30` - Null-coalescing. Means if input null accept as value following.
 * `nameof()` - returns name of a var.
-* `var? x` - signaling that x - a nullable type and need to handle null exceptions on ur own.
+* `var? x` - signaling that x - a nullable type and need to handle null exceptions on ur own. Check if the object is not null `Shout?.Invoke(this, EventArgs.Empty)`
 * `name!.Length` - Null forgiving. Means no more warnings about nullable varibale.
 
 ## Keywords
@@ -56,8 +58,8 @@ Before enum will make it like an ordinal enum from C++. Use it for bitwise opera
 * `get; set;` - Getters and setters. Also can be used with lambdas. Also could be `init` means only one setting works great with `record`(C# 9).
 * `public Preson this[int index]` - Indexers, use in a pair with get and set. In C++ using with overloading `[]` operator.
 
-## Generics (Data structrues)
-All these stuff is like stl, mfc types.
+## Collections (Data Structures)
+Two types. `System.Collections` and `System.Collections.Generic`
 ### List
 `List<T>`
 Data Structure: Array
@@ -86,4 +88,52 @@ foreach (Passenger passenger in passengers)
     ...
   }
 }
+```
+
+### Generics (C# 2)
+Generics allow to pass any type to class, method and interface. Common use with `System.Collections.Generic` data structures.
+Generics do compile time checks for types increasing the type safety, thats why they should be prefered over non-generic `System.Collections`.In C# It allows to work and use collections which are pretty similiar to STL. All these stuff is like stl, mfc types. Basicaly it is templates. 
+```cs
+public class GenericContainer<T>
+{
+    private T item;
+
+    public void Add(T newItem)
+    {
+        item = newItem;
+    }
+
+    public T Get()
+    {
+        return item;
+    }
+}
+```
+
+### Delegates
+Delegates is a type-safe method pointer. In C++ it is just `void (*funcPtr)(string)`. Event in C# build on top of the delegates. Got built-in support for async. **Note:**  Events built on top of delegates and are used to define a publisher-subscriber relationship. Events can only be invoked by the class that declares them. While <ins>delegates can directly invoke the methods they reference.</ins>
+Predefined delegates: `public delegate void EventHandler(object? sender, EventArgs e)`
+```cs
+public delegate void MyDelegate(string message);
+
+public static void PrintMessage(string message)
+{
+    Console.WriteLine($"Message: {message}");
+}
+
+MyDelegate del = PrintMessage;
+del("Hello, Delegates!"); // Output: Message: Hello, Delegates!
+```
+Also, delegates are multicast, meaning you can assign as many functions to it as you want.
+```cs
+public static void PrintMessage1(string message) => Console.WriteLine($"Message 1: {message}");
+public static void PrintMessage2(string message) => Console.WriteLine($"Message 2: {message}");
+
+MyDelegate del = PrintMessage1;
+del += PrintMessage2; // Add another method
+
+del("Hello!"); // Calls both PrintMessage1 and PrintMessage2
+
+del -= PrintMessage1; // Remove a method
+del("Hi!"); // Calls only PrintMessage2
 ```
