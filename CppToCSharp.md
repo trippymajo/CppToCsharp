@@ -27,9 +27,10 @@ Could be used with type or without - `Person pers = new()` and `Person pers = ne
 Before enum will make it like an ordinal enum from C++. Use it for bitwise operations. Better to use enums with byte like: `public enum Vals : byte` and with each val go through the byte range 0 to 128 (256 not included). 
 
 ## Operators
-* `x ?? 30` or `x ??= 30` - Null-coalescing. Means if input null accept as value following.
 * `nameof()` - returns name of a var.
 * `var? x` - signaling that x - a nullable type and need to handle null exceptions on ur own. Check if the object is not null `Shout?.Invoke(this, EventArgs.Empty)`
+* `x ?? 30` or `x ??= 30` - Null-coalescing. Means if input null accept as value following.
+* `Person man!!` - Checks whether value is null and if so, thorws exception. Same as `ArgumentNullException.ThrowIfNull(man)`
 * `name!.Length` - Null forgiving. Means no more warnings about nullable varibale.
 
 ## Keywords
@@ -49,10 +50,14 @@ Before enum will make it like an ordinal enum from C++. Use it for bitwise opera
 * `protected` - Same class and the derived classes from other assemblies.
 * `protected internal` - Ist like protected + internal, Class + Derived for other assemblies, but not other classes in other asseblies
 * `file` - type could be used within its .cs file. Use it when there are multiple classes in .cs and you need them to wrok all with each other (.NET 7).
+* `sealed` - sealed restrict other clases to derive from this class. Or can be used with methods, which prevents further overriding from your class.
 ### Class related
-* `record Program` - immutable value based (not ref) structure. Used for Data modeling. Basicly its a struct with const params with only initializing. Supports equlity checks with `==`.
-* `abstract class Program` - Interface. Like having a pure virtual functions in class.
+* `record Data` - immutable value based (not ref) structure. Used for Data modeling. Basicly its a struct with const params with only initializing. Supports equlity checks with `==`. Could be mutable with `get; set;`
+* `struct Data` - mutable value based (not ref). Used for Data modeling.
+* `abstract class Program` - a class with some pure virtual functions mixed with concrete implementations.
+* `interface IProg` - is a abstract class with only pure virtual functions inside. All members are public. Serialization not working.
 * `partial class Program` - just like header files, but function are inlined in it.
+* `Employee emp = person as Employee` - as just another casting, but reutrn null, without throwing exception if the converting is not possible. Note that C-style casting `(Employee)person` throws an exception if no completed.
 ### Field related
 * `required` - must have params of the class when initialising. In C++ its basicly constructors' work (C# 11).
 * `get; set;` - Getters and setters. Also can be used with lambdas. Also could be `init` means only one setting works great with `record`(C# 9).
@@ -68,8 +73,10 @@ C++: std::vector
 ## Features
 ### Less {} for using and namspace (C# 10)
 You allowed not to put all the code in brackets for `using` and `namespace`.
+
 ### Tuples
 `public (string Name, int Number) doSmth(){}` - like a std::tuple but syntax is different.
+
 ### Pattern Mathcing (C# 8)
 Allows to feed the pattern in order to get what you want to find in value or class. In classes used with keyword `when` and switch statements like:
 ```cs
@@ -136,4 +143,53 @@ del("Hello!"); // Calls both PrintMessage1 and PrintMessage2
 
 del -= PrintMessage1; // Remove a method
 del("Hi!"); // Calls only PrintMessage2
+```
+
+## C# code style
+### Method chaining/Fluent style
+Multiple method calls are chained together in a single statement.
+```cs
+public class Person
+{
+    public string Name { get; set; }
+    public string Age { get; set; }
+    
+    public Person SetName (string name)
+    {
+        Name = name;
+        return this;
+    }
+
+    public Person SetAge(int age)
+    {
+        Age = age;
+        return this;
+    }
+}
+```
+Usage:
+```cs
+Person person = new()
+    .SetName("Joe Peach")
+    .SetAge(38);
+```
+
+### Extension methods
+It is a compiler trick (huh?) works as free functions in C++, free from class functions. In C# this works with decaring static public class with public static methods with `this` in parameters. In C# it looks like:
+```cs
+public static class StringExtensions
+{
+    public static bool IsPalindrome(this string str)
+    {
+        if (string.IsNullOrWhiteSpace(str)) return false;
+
+        var reversed = new string(str.Reverse().ToArray());
+        return string.Equals(str, reversed, StringComparison.OrdinalIgnoreCase);
+    }
+} 
+```
+Using:
+```cs
+string word = "Racecar";
+bool result = word.IsPalindrome(); // True
 ```
