@@ -7,18 +7,29 @@
 * `dynamic x` - Try avoid it. It is like void*. Runtime check. Dynamic programming, APIs. Pretty slow.
 * `System.Convert` - everything from basic type could be converted to other basic types.
 ## Strings
+> [!IMPORTANT]
+> Strings are immutable. And each time you do some concat, +, and etc. operations, at first it uses buffer polling (2-3 optimized operations), but when more - it starts to allocate new memory, mening drop in speed. So it is better to use `StringBuilder`.  
+
 * `@"text"` - Verbatim strings, raw string just text without escape sequence.
 * `$$"text with {{x}}` - Interpolated, $$ means how many {{ should be for variable.
+
+> [!TIP]
+> For searching: `Contains` or `IndexOf` - single search, `SearchValues<T>` - multiple search, `Regex` - complex search
+
 ## Floating points
 They have got IsInfinity and etc. So its possible to use it with higher math's uncertainties.
-* `decimal z` - introduced, 16 bytes represents as int. Not working with higher math calculations like dividing by zero and etc.
+* `decimal z` - introduced, 16 bytes represents as int. Not working with higher math calculations like dividing by zero and etc. Higher precision but slower than `float` and `double`.
+* `System.Half` - 2-byte type. Alternative for float and double. Some architectures lack native 16-bit floating-point support (.NET 5). 
 ## Int
 * `nint, nuint` - Native-sized integers for platform specific dev. Pointers to integer value in memory. Its all about 32/64 bit.
+* `System.Numerics.BigInteger` - Integer for realy large numbers, which using dynamic memory meaning it almost has no ranges (limits).
+* `System.Numerics.Complex` - 16 bytes integer for complex math can be represented as `a + bi`, where a and b - real numbers, i - imaginary unit.
+* `System.Numerics.Quaternion` - 16 bytes for smooth 3D rotation. Can do only multiplications `*`.
 ## Array
 * `string[,] grid` - Two (or more) dimensinal array like `new int[5][4]`.
 * `string [][] jag` - Its like put in array another array. Like a `int[3] = new int[5]`.
 * Pattern matchings - like [], [..] and etc (C# 11).
-
+* `Tensor<T>` - Multidimensional arrays for AI workaround (.NET 9).
 
 # Memory
 ## new
@@ -77,11 +88,32 @@ Before enum will make it like an ordinal enum from C++. Use it for bitwise opera
 * `public Preson this[int index]` - Indexers, use in a pair with get and set. In C++ using with overloading `[]` operator.
 
 # Collections (Data Structures)
-Two types. `System.Collections` and `System.Collections.Generic`
+Two types. `System.Collections` -> not type-safe annd less efficient; `System.Collections.Generic` -> type-safe and efficient
+
 ## List
 `List<T>`
 Data Structure: Array
 C++: std::vector
+
+## Dictionary
+`Dictionary<TKey, TValue>`
+Data Structure: Hashmap
+C++: std::unordered_map
+
+## Set 
+`HashSet<T>`
+Data Structure: Hashmap
+C++: std::unordered_set
+
+## Stack
+`Stack<T>`
+Data Structure: Stack (LIFO)
+C++: std::stack
+
+## Queue
+`Queue<T>`
+Data Structure: Queue (FIFO)
+C++: std::stack
 
 # Features
 ## Less {} for using and namspace (C# 10)
