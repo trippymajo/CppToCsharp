@@ -113,7 +113,7 @@ C++: std::stack
 ## Queue
 `Queue<T>`
 Data Structure: Queue (FIFO)
-C++: std::stack
+C++: std::queue
 
 # Features
 ## Less {} for using and namspace (C# 10)
