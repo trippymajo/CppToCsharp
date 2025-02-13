@@ -88,12 +88,17 @@ Before enum will make it like an ordinal enum from C++. Use it for bitwise opera
 * `public Preson this[int index]` - Indexers, use in a pair with get and set. In C++ using with overloading `[]` operator.
 
 # Collections (Data Structures)
-Two types. `System.Collections` -> not type-safe annd less efficient; `System.Collections.Generic` -> type-safe and efficient
+Two types. `System.Collections` -> not type-safe annd less efficient; `System.Collections.Generic` -> type-safe and efficient.  
 
 ## List
 `List<T>`,`SortedList<T>`
 Data Structure: Array, Array (But with active sorting leading to slower insert and remove)
 C++: `std::vector`
+
+## Linked List
+`LinkedList<T>`
+Data Structure: Linked List
+C++: `std::list`
 
 ## Dictionary
 `Dictionary<TKey, TValue>`,`SortedDictionary<TKey, TValue
@@ -108,12 +113,31 @@ C++: `std::unordered_set`,`std::set`
 ## Stack
 `Stack<T>`
 Data Structure: Stack (LIFO)
-C++: std::stack
+C++: `std::stack`
 
 ## Queue
 `Queue<T>`
 Data Structure: Queue (FIFO)
-C++: std::queue
+C++: `std::queue`
+
+## Read-only, Immutable, Frozen Collections
+### Read-only
+`ReadOnlyCollection<T>` - not thread safe, memory efficient (no copy).
+Used with: `List<T>` and `Dictionary<T>`
+```cs
+List<int> numbers = new List<int> { 1, 2, 3, 4, 5 };
+ReadOnlyCollection<int> readOnlyNumbers = new ReadOnlyCollection<int>(numbers);
+```
+### Immutable
+`ImmutableArray<T>`, `ImmutableList<T>`, `ImmutableDictionary<T>`  
+Truly immutable—once created, no modifications are possible. Thread-safe. Any operation that “modifies” it actually returns a new modified collection.
+```cs
+ImmutableList<int> immutableNumbers = ImmutableList.Create(1, 2, 3, 4, 5);
+```
+### Frozen
+
+## Concurent collections (thread-safe)
+
 
 # Features
 ## Less {} for using and namspace (C# 10)
