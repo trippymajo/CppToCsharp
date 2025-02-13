@@ -91,19 +91,19 @@ Before enum will make it like an ordinal enum from C++. Use it for bitwise opera
 Two types. `System.Collections` -> not type-safe annd less efficient; `System.Collections.Generic` -> type-safe and efficient
 
 ## List
-`List<T>`
-Data Structure: Array
-C++: std::vector
+`List<T>`,`SortedList<T>`
+Data Structure: Array, Array (But with active sorting leading to slower insert and remove)
+C++: `std::vector`
 
 ## Dictionary
-`Dictionary<TKey, TValue>`
-Data Structure: Hashmap
-C++: std::unordered_map
+`Dictionary<TKey, TValue>`,`SortedDictionary<TKey, TValue
+Data Structure: Hashmap, Red-Black Tree
+C++: `std::unordered_map`,`std::map`
 
 ## Set 
-`HashSet<T>`
-Data Structure: Hashmap
-C++: std::unordered_set
+`HashSet<T>`,`SortedSet<T>`
+Data Structure: Hashmap, Red-Black Tree
+C++: `std::unordered_set`,`std::set`
 
 ## Stack
 `Stack<T>`
