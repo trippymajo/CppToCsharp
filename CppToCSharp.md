@@ -121,23 +121,15 @@ Data Structure: Queue (FIFO)
 C++: `std::queue`
 
 ## Read-only, Immutable, Frozen Collections
-### Read-only
-`ReadOnlyCollection<T>` - not thread safe, memory efficient (no copy).
-Used with: `List<T>` and `Dictionary<T>`
-```cs
-List<int> numbers = new List<int> { 1, 2, 3, 4, 5 };
-ReadOnlyCollection<int> readOnlyNumbers = new ReadOnlyCollection<int>(numbers);
-```
-### Immutable
-`ImmutableArray<T>`, `ImmutableList<T>`, `ImmutableDictionary<T>`  
-Truly immutable—once created, no modifications are possible. Thread-safe. Any operation that “modifies” it actually returns a new modified collection.
-```cs
-ImmutableList<int> immutableNumbers = ImmutableList.Create(1, 2, 3, 4, 5);
-```
-### Frozen
-
-## Concurent collections (thread-safe)
-
+| Feature                  | `ReadOnlyCollection<T>` / `IReadOnlyList<T>` | `ImmutableList<T>` / `ImmutableDictionary<K,V>` | `FrozenSet<T>` / `FrozenDictionary<K,V>` | `ConcurrentBag<T>` / `ConcurrentQueue<T>` / `ConcurrentDictionary<K,V>` |
+|--------------------------|--------------------------------|--------------------------------|--------------------------------|------------------------------------------------|
+| **Modification Allowed?** | ❌ No (wrapper only) | ❌ No (fully immutable) | ❌ No (frozen after creation) | ✅ Yes (thread-safe updates allowed) |
+| **Underlying Collection Modifiable?** | ✅ Yes (if accessed directly) | ❌ No | ❌ No | ✅ Yes (supports concurrent updates) |
+| **Memory Efficiency**   | ✅ High (no copy) | ❌ Moderate (copies required for changes) | ✅ Optimized for reads | ⚡ Depends on collection type |
+| **Performance (Read)**  | ⚡ Fast (depends on original list) | 🚀 Fast | 🔥 Ultra-fast | ✅ Fast, designed for parallel reads |
+| **Performance (Write)** | ⚡ Fast (original list changes) | ❌ Slow (new copy each time) | ❌ Not allowed | ✅ Fast, supports concurrent writes |
+| **Thread-Safe?**        | ❌ No | ✅ Yes | ✅ Yes | ✅ Yes (designed for multi-threading) |
+| **Best Use Case**       | Exposing an internal list safely | Functional programming, persistent data structures | Read-heavy scenarios, high performance | Shared access in multi-threaded applications |
 
 # Features
 ## Less {} for using and namspace (C# 10)
