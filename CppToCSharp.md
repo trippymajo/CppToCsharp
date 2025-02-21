@@ -12,6 +12,7 @@
 
 * `@"text"` - Verbatim strings, raw string just text without escape sequence.
 * `$$"text with {{x}}` - Interpolated, $$ means how many {{ should be for variable.
+* `SecureString` - Use it for prvate data which should be encrypted and released ASAP.
 
 > [!TIP]
 > For searching: `Contains` or `IndexOf` - single search, `SearchValues<T>` - multiple search, `Regex` - complex search
@@ -28,9 +29,11 @@ They have got IsInfinity and etc. So its possible to use it with higher math's u
 ## Array
 * `string[,] grid` - Two (or more) dimensinal array like `new int[5][4]`.
 * `string [][] jag` - Its like put in array another array. Like a `int[3] = new int[5]`.
+* `array[^2]` - Access element from the end. Reverses the index.
+* `array[4..10] - Get elements from 4 to 10 range.
 * Pattern matchings - like [], [..] and etc (C# 11).
 * `Tensor<T>` - Multidimensional arrays for AI workaround (.NET 9).
-
+  
 # Memory
 ## new
 Could be used with type or without - `Person pers = new()` and `Person pers = new Person();` Both right. Any thing else works familiar to C++.
@@ -45,7 +48,7 @@ using (var cls = new MyClass())
     // Some code with
 }  // Dispose() is called automaticly
 ```
-
+  
 # Attributes
 ## [Flag]
 Before enum will make it like an ordinal enum from C++. Use it for bitwise operations. Better to use enums with byte like: `public enum Vals : byte` and with each val go through the byte range 0 to 128 (256 not included). 
@@ -56,7 +59,7 @@ Before enum will make it like an ordinal enum from C++. Use it for bitwise opera
 * `x ?? 30` or `x ??= 30` - Null-coalescing. Means if input null accept as value following.
 * `Person man!!` - Checks whether value is null and if so, thorws exception. Same as `ArgumentNullException.ThrowIfNull(man)`
 * `name!.Length` - Null forgiving. Means no more warnings about nullable varibale.
-
+  
 # Keywords
 ## Pre-Code
 * `using static System.Console` - like `using namespace std`.
@@ -86,7 +89,7 @@ Before enum will make it like an ordinal enum from C++. Use it for bitwise opera
 * `required` - must have params of the class when initialising. In C++ its basicly constructors' work (C# 11).
 * `get; set;` - Getters and setters. Also can be used with lambdas. Also could be `init` means only one setting works great with `record`(C# 9).
 * `public Preson this[int index]` - Indexers, use in a pair with get and set. In C++ using with overloading `[]` operator.
-
+  
 # Collections (Data Structures)
 Two types. `System.Collections` -> not type-safe annd less efficient; `System.Collections.Generic` -> type-safe and efficient.  
 
@@ -131,11 +134,13 @@ C++: `std::queue`
 | **Thread-Safe?**        | ❌ No | ✅ Yes | ✅ Yes | ✅ Yes (designed for multi-threading) |
 | **Best Use Case**       | Exposing an internal list safely | Functional programming, persistent data structures | Read-heavy scenarios, high performance | Shared access in multi-threaded applications |
 
+*P.S. Frozen appeared in .NET 8*
+  
 # Features
 ## Less {} for using and namspace (C# 10)
 You allowed not to put all the code in brackets for `using` and `namespace`.
 
-### Tuples
+## Tuples
 `public (string Name, int Number) doSmth(){}` - like a std::tuple but syntax is different.
 
 ## Pattern Mathcing (C# 8)
@@ -206,6 +211,17 @@ del -= PrintMessage1; // Remove a method
 del("Hi!"); // Calls only PrintMessage2
 ```
 
+## Span<T>
+Instead of using full range of the array (and only array), you can take part of it, with which you will be working to gain some performance.  
+Spans works best with `Index` type. Best practice to use it while doing text handlings.
+
+```cs
+int[] numbers = { 10, 20, 30, 40, 50 };
+Span<int> sliceSpan = numbers.AsSpan(1, 3); // View elements [20, 30, 40]
+sliceSpan[0] = 99; // Modify through Span (changes original array)
+ReadOnlySpan<int> indexSpan = sliceSpan[^1]; // Get last element [40]
+```
+  
 # C# code style
 ## Method chaining/Fluent style
 Multiple method calls are chained together in a single statement.
@@ -255,9 +271,28 @@ string word = "Racecar";
 bool result = word.IsPalindrome(); // True
 ```
 
+## Collection expressions (C# 12)
+Declare and initialize data structures with `[]` brackets instead of `{}`
+```cs
+Old: List<int> numList = new() {1, 2, 3};
+New: List<int> numList = [1, 2, 3];
+```
+
+## Spread element (spread operator) (C# 12)
+Use spread operator to combine dta structures together. Working only in pair with collection expressions
+```cs
+int [] combined array = [..arr1, ..arr2, 32];
+```
+
+## Nullable
+When its is okay to return null in C++, here you should prefer returning empty objects over null, cause issues will come if you are not checking your function call for null ret value 
+(But IDE can spot the problems, and give an advice to check for null return)
+  
 # Compilation
+
 ## Just-In-Time (JIT)
 By default, C# code is compiled at runtime using JIT (Just-In-Time) compilation. This means that the .NET runtime compiles IL (Intermediate Language) into native machine code just before execution. While this allows for cross-platform compatibility and optimizations at runtime, it results in slower startup times compared to fully compiled applications.
+
 ## Ahead of Time (AOT)
 AOT compilation precompiles the application into native machine code before execution, similar to how C++ compilers work. Faster startup time, better performance but larger output files. Also there are some limitations:
 * No Reflection-based Features – Many reflection-based APIs (System.Reflection, dynamic) may not work.
